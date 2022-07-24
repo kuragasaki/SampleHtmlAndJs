@@ -6,6 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="./css/reset.css" rel="stylesheet" type="text/css">
         <link href="./css/main_style.css" rel="stylesheet" type="text/css">
+        <link href="./css/analog.css" rel="stylesheet" type="text/css">
+        <script src="./js/analog.js"></script>
         <title>Sample Html and JavaScript</title>
     </head>
     <body>
@@ -13,7 +15,7 @@
             <header>
                 <h1>Sample Html and JavaScript</h1>
             </header>
-            <section id="">
+            <section id="analog">
             </section>
         </article>
         <article id="">
@@ -34,5 +36,28 @@
                 <audio></audio>
             </section>
         </article>
+        <script type="text/javascript">
+        window.addEventListener("DOMContentLoaded", () => {
+            const { context , hankei } =  initialCanvas("analog");
+            const cCircle = centerCircle( context );
+            const mBan = mojiban ( context , hankei );
+            const hourHand = new handObj( handDatas.hour , context , hankei );
+            const minuteHand = new handObj( handDatas.minute , context , hankei );
+            const secondHand = new handObj( handDatas.second , context , hankei );
+        
+            const sideLength = hankei * 2;
+            
+            setInterval(()=> {
+                const date = new Date();
+                // 時計を消去
+                context.clearRect(-hankei , -hankei , sideLength , sideLength);
+                mBan();
+                hourHand.rewrite( (date.getHours()%12) * 60 + date.getMinutes() );
+                minuteHand.rewrite( date.getMinutes() );
+                secondHand.rewrite( date.getSeconds() );
+                cCircle( );
+            },1000);
+        });
+        </script>
     </body>
 </html>
